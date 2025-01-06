@@ -12,7 +12,11 @@ public class WordBank {
 
     public WordBank(String filePath) throws IOException {
         words = new ArrayList<>();
-        loadWords(filePath);
+        try {
+            loadWords(filePath);
+        } catch (IOException e) {
+            throw new IOException("Erro ao carregar o banco de palavras do arquivo: " + filePath, e);
+        }
     }
 
     private void loadWords(String filePath) throws IOException {

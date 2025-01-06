@@ -8,8 +8,7 @@ public class Hangman {
     private String word;
     private StringBuilder hiddenWord;
     private Set<Character> wrongGuesses;
-    private Set<Character> rightGuesses;
-    private int lives;
+    private int tries;
     private long roundMaxTime;
     private long roundStartTime;
 
@@ -17,8 +16,7 @@ public class Hangman {
         this.word = word;
         this.hiddenWord = new StringBuilder("_".repeat(word.length()));
         this.wrongGuesses = new HashSet<>();
-        this.rightGuesses = new HashSet<>();
-        this.lives = lives;
+        this.tries = lives;
         this.roundMaxTime = roundTimeSec * 1000L;
     }
 
@@ -26,24 +24,23 @@ public class Hangman {
         roundStartTime = System.currentTimeMillis();
     }
 
-    public boolean timeOut() {
+    public boolean isTimeOut() {
         long elapsedTime = System.currentTimeMillis() - roundStartTime;
         return elapsedTime > roundMaxTime;
     }
 
     public boolean guess(char letter) {
-        if (timeOut()) {
+        if (isTimeOut()) {
             System.out.println("\nO tempo para esta rodada acabou!");
             return false;
         }
 
-        if (rightGuesses.contains(letter) || wrongGuesses.contains(letter)) {
+        if (wrongGuesses.contains(letter) || hiddenWord.toString().contains(String.valueOf(letter))) {
             System.out.println("Você já selecionou esta letra!");
             return false;
         }
 
         if (word.contains(String.valueOf(letter))) {
-            rightGuesses.add(letter);
             updateHiddenWord(letter);
             return true;
         } else {
@@ -65,15 +62,15 @@ public class Hangman {
     }
 
     public boolean lose() {
-        return wrongGuesses.size() >= lives;
+        return wrongGuesses.size() >= tries;
     }
 
     public String getHiddenWord() {
         return hiddenWord.toString();
     }
 
-    public int getLives() {
-        return lives - wrongGuesses.size();
+    public int getTries() {
+        return tries - wrongGuesses.size();
     }
 
     public Set<Character> getWrongGuesses() {
