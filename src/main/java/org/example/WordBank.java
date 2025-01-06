@@ -10,18 +10,18 @@ import java.util.Random;
 public class WordBank {
     private List<String> words;
 
-    private void loadWords(String path) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(path));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            words.add(line.trim().toUpperCase());
-        }
-        reader.close();
+    public WordBank(String filePath) throws IOException {
+        words = new ArrayList<>();
+        loadWords(filePath);
     }
 
-    public void wordBank(String path) throws IOException {
-        words = new ArrayList<>();
-        loadWords(path);
+    private void loadWords(String filePath) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath));) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                words.add(line.trim().toUpperCase());
+            }
+        }
     }
 
     public String selectWord() {

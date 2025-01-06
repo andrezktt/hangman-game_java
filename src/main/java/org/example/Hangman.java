@@ -20,6 +20,11 @@ public class Hangman {
     }
 
     public boolean guess(char letter) {
+        if (rightGuesses.contains(letter) || wrongGuesses.contains(letter)) {
+            System.out.println("Você já selecionou esta letra!");
+            return false;
+        }
+
         if (word.contains(String.valueOf(letter))) {
             rightGuesses.add(letter);
             updateHiddenWord(letter);
