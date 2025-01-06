@@ -10,16 +10,33 @@ public class Hangman {
     private Set<Character> wrongGuesses;
     private Set<Character> rightGuesses;
     private int lives;
+    private long roundMaxTime;
+    private long roundStartTime;
 
-    public Hangman(String word, int lives) {
+    public Hangman(String word, int lives, int roundTimeSec) {
         this.word = word;
         this.hiddenWord = new StringBuilder("_".repeat(word.length()));
         this.wrongGuesses = new HashSet<>();
         this.rightGuesses = new HashSet<>();
         this.lives = lives;
+        this.roundMaxTime = roundTimeSec * 1000L;
+    }
+
+    public void StartRound() {
+        roundStartTime = System.currentTimeMillis();
+    }
+
+    public boolean timeOut() {
+        long elapsedTime = System.currentTimeMillis() - roundStartTime;
+        return elapsedTime > roundMaxTime;
     }
 
     public boolean guess(char letter) {
+        if (timeOut()) {
+            System.out.println("\nO tempo para esta rodada acabou!");
+            return false;
+        }
+
         if (rightGuesses.contains(letter) || wrongGuesses.contains(letter)) {
             System.out.println("Você já selecionou esta letra!");
             return false;

@@ -7,9 +7,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
         try (Scanner scanner = new Scanner(System.in);) {
 
+            System.out.println("MODOS DE JOGO:");
             System.out.println("1. Jogo Solo");
             System.out.println("2. Multijogador");
-            System.out.print("\nEscolha um modo de jogo:");
+            System.out.print("\nEscolha um modo de jogo: ");
             int gameMode = scanner.nextInt();
 
             String selectedWord = "";
@@ -18,32 +19,36 @@ public class Main {
                 WordBank bank = new WordBank("src/main/resources/words.txt");
                 selectedWord = bank.selectWord();
             } else if (gameMode == 2) {
-                System.out.println("Jogador 1, digite a palavra secreta: ");
+                System.out.print("\nJogador 1, digite a palavra secreta: ");
                 scanner.nextLine();
                 selectedWord = scanner.nextLine().trim().toUpperCase();
                 System.out.println("Jogador 2, é a sua vez de adivinhar!");
             }
 
-            System.out.println("\nEscolha o nível de dificuldade:");
+            System.out.println("\nDIFICULDADE:");
             System.out.println("1. Fácil");
             System.out.println("2. Médio");
             System.out.println("3. Difícil");
+            System.out.print("\nEscolha o nível de dificuldade: ");
             int level = scanner.nextInt();
             int lives = switch (level) {
                 case 1 -> 10;
                 case 2 -> 6;
                 case 3 -> 4;
                 default -> {
-                    System.out.println("Opção inválida! Escolhendo o nível por padrão.");
+                    System.out.println("Opção inválida! Escolhendo o nível médio por padrão.");
                     yield 6;
                 }
             };
 
-            System.out.print("Digite seu nome: ");
+            System.out.print("\nDigite seu nome: ");
+            scanner.nextLine();
             String playerName = scanner.nextLine();
             Player player = new Player(playerName);
 
-            Hangman hangman = new Hangman(selectedWord, lives);
+            int roundTimeLimitInSeconds = 30;
+
+            Hangman hangman = new Hangman(selectedWord, lives, roundTimeLimitInSeconds);
 
             long startTime = System.currentTimeMillis();
 
@@ -54,13 +59,16 @@ public class Main {
                         + "\nTentativas restantes: " + hangman.getLives()
                 );
 
+                hangman.StartRound();
+                System.out.println("**Você tem " + roundTimeLimitInSeconds + " segundos para tentar uma letra.");
+
                 System.out.print("\nDigite uma letra: ");
                 char letter = scanner.next().toUpperCase().charAt(0);
 
                 if (!hangman.guess(letter)) {
-                    System.out.println("Você errou!");
+                    System.out.println("\nVocê errou!");
                 } else {
-                    System.out.println("Você acertou!");
+                    System.out.println("\nVocê acertou!");
                 }
             }
 
