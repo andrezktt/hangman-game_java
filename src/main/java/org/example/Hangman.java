@@ -12,12 +12,27 @@ public class Hangman {
     private long roundMaxTime;
     private long roundStartTime;
 
+    private static final String[] HANGMAN_PICTURES = {
+            "  _______\n |     |\n |\n |\n |\n |",
+            "  _______\n |     |\n |     O\n |\n |\n |",
+            "  _______\n |     |\n |     O\n |     |\n |\n |",
+            "  _______\n |     |\n |     O\n |    /|\n |\n |",
+            "  _______\n |     |\n |     O\n |    /|\\\n |\n |",
+            "  _______\n |     |\n |     O\n |    /|\\\n |    /\n |",
+            "  _______\n |     |\n |     O\n |    /|\\\n |    / \\\n |"
+    };
+
     public Hangman(String word, int lives, int roundTimeSec) {
         this.word = word;
         this.hiddenWord = new StringBuilder("_".repeat(word.length()));
         this.wrongGuesses = new HashSet<>();
         this.tries = lives;
         this.roundMaxTime = roundTimeSec * 1000L;
+    }
+
+    public void showHangman() {
+        int mistakes = wrongGuesses.size();
+        System.out.println(HANGMAN_PICTURES[mistakes]);
     }
 
     public void StartRound() {
@@ -45,6 +60,7 @@ public class Hangman {
             return true;
         } else {
             wrongGuesses.add(letter);
+            // showHangman();
             return false;
         }
     }

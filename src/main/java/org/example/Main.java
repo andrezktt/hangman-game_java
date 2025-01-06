@@ -46,7 +46,9 @@ public class Main {
             long totalTime = (finishTime - startTime) / 1000;
 
             if (hangman.win()) {
-                System.out.println("\nParabéns, " + player.getName() + "! Você venceu em " + totalTime + " segundos!");
+                System.out.println("\n=============================================================================");
+                System.out.println("Parabéns, " + player.getName() + "! Você venceu em " + totalTime + " segundos!");
+                System.out.println("=============================================================================");
             } else {
                 System.out.println("\nVocê perdeu! A palavra era: " + selectedWord);
             }
